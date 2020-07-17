@@ -1,0 +1,252 @@
+Option Explicit
+
+Sub MainUno()
+    
+    CopyToExcel
+    'InitialResponse
+    MoveToFolder
+    
+End Sub
+ 
+' ################################################################
+' Add new email info to Excel sheet
+ 
+ Sub CopyToExcel()
+
+ Dim xlApp As Object
+ Dim xlWB As Object
+ Dim xlSheet As Object
+ Dim rCount As Long
+ Dim bXStarted As Boolean
+ Dim enviro As String
+ Dim strPath As String
+
+ Dim currentExplorer As Explorer
+ Dim Selection As Selection
+ Dim olItem As Outlook.MailItem
+ Dim obj As Object
+ Dim strColA, strColB, strColC, strColD, strColE As String
+               
+' Get Excel set up
+     On Error Resume Next
+     Set xlApp = GetObject(, "Excel.Application")
+     If Err <> 0 Then
+         Application.StatusBar = "Please wait while Excel source is opened ... "
+         Set xlApp = CreateObject("Excel.Application")
+         bXStarted = True
+     End If
+     On Error GoTo 0
+     
+'## Open a specific workbook to input the data
+'the path of the workbook under the windows user account
+enviro = CStr(Environ("teaglewl"))
+ strPath = enviro & "\\lsr-ds4\bc6\HUMAN_PROTOCOL\participant_lists\HV_list_new.xlsx"
+     Set xlWB = xlApp.Workbooks.Open(strPath)
+     Set xlSheet = xlWB.Sheets("Sheet1")
+'## End Specific workbook
+
+'## Use New Workbook
+'Set xlWB = xlApp.Workbooks.Add
+'Set xlSheet = xlWB.Sheets("Sheet1")
+'## end use new workbook
+
+' Add column names
+  xlSheet.Range("A1") = "Sender"
+  xlSheet.Range("B1") = "Sender Address"
+  xlSheet.Range("C1") = "Message Body"
+  xlSheet.Range("D1") = "Sent To"
+  xlSheet.Range("E1") = "Recieved Time"
+
+' Process the message record
+    
+  On Error Resume Next
+'Find the next empty line of the worksheet
+rCount = xlSheet.Range("A" & xlSheet.Rows.Count).End(-4162).Row
+'needed for Exchange 2016. Remove if causing blank lines.
+rCount = rCount + 1
+
+' get the values from outlook
+Set currentExplorer = Application.ActiveExplorer
+Set Selection = currentExplorer.Selection
+  For Each obj In Selection
+
+    Set olItem = obj
+    
+ 'collect the fields
+    strColA = olItem.SenderName
+    strColB = olItem.SenderEmailAddress
+    strColC = olItem.Body
+    strColD = olItem.To
+    strColE = olItem.ReceivedTime
+    
+'### Get all recipient addresses
+' instead of To names
+Dim strRecipients As String
+Dim Recipient As Outlook.Recipient
+For Each Recipient In olItem.Recipients
+ strRecipients = Recipient.Address & "; " & strRecipients
+ Next Recipient
+
+  strColD = strRecipients
+'### end all recipients addresses
+
+'### Get the Exchange address
+' if not using Exchange, this block can be removed
+ Dim olEU As Outlook.ExchangeUser
+ Dim oEDL As Outlook.ExchangeDistributionList
+ Dim recip As Outlook.Recipient
+ Set recip = Application.Session.CreateRecipient(strColB)
+
+If InStr(1, strColB, "/") > 0 Then
+' if exchange, get smtp address
+    Select Case recip.AddressEntry.AddressEntryUserType
+       Case OlAddressEntryUserType.olExchangeUserAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+             strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olOutlookContactAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olExchangeDistributionListAddressEntry
+         Set oEDL = recip.AddressEntry.GetExchangeDistributionList
+         If Not (oEDL Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+     End Select
+End If
+' ### End Exchange section
+
+If InStr(1, strColD, "/") > 0 Then
+' if exchange, get smtp address
+    Select Case recip.AddressEntry.AddressEntryUserType
+       Case OlAddressEntryUserType.olExchangeUserAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+             strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olOutlookContactAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olExchangeDistributionListAddressEntry
+         Set oEDL = recip.AddressEntry.GetExchangeDistributionList
+         If Not (oEDL Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+     End Select
+End If
+' ### End Exchange section
+
+'write them in the excel sheet
+  xlSheet.Range("A" & rCount) = strColA ' sender name
+  xlSheet.Range("B" & rCount) = strColB ' sender address
+  xlSheet.Range("C" & rCount) = strColC ' message body
+  xlSheet.Range("D" & rCount) = strColD ' sent to
+  xlSheet.Range("E" & rCount) = strColE ' recieved time
+ 
+'Next row
+  rCount = rCount + 1
+
+' size the cells
+    xlSheet.Columns("A:X").EntireColumn.AutoFit = False
+    xlSheet.Columns("A:X").EntireColumn.WrapText = False
+    xlSheet.Columns("A:A").ColumnWidth = 20
+    xlSheet.Columns("B:B").ColumnWidth = 20
+    xlSheet.Columns("C:C").ColumnWidth = 20
+    xlSheet.Columns("D:D").ColumnWidth = 20
+    'xlSheet.Range("A2").Select
+    xlSheet.Columns("A:X").VerticalAlignment = xlTop
+
+ Next
+ xlApp.Visible = True
+
+' to save but not close
+xlWB.Save
+
+' to save and close
+     xlWB.Close 1
+     If bXStarted Then
+         xlApp.Quit
+     End If
+' end save and close
+    
+     Set olItem = Nothing
+     Set obj = Nothing
+     Set currentExplorer = Nothing
+     Set xlSheet = Nothing
+     Set xlWB = Nothing
+     Set xlApp = Nothing
+
+End Sub
+     
+' ################################################################
+' Respond to email with "Thanks for interest, pls call any time on Tuesday for eligibility screening"
+
+Sub InitialResponse()
+
+Dim objMsg As MailItem
+Dim Selection As Selection
+Dim obj As Object
+
+Set Selection = ActiveExplorer.Selection
+
+For Each obj In Selection
+
+Set objMsg = Application.CreateItem(olMailItem)
+
+ With objMsg
+  .To = obj.SenderEmailAddress
+  .Subject = "RE: Information Request: Clinical Center Study PI18-EI-0046"
+  '.Categories = "Test"
+  .Body = "Greetings," & vbCrLf & vbCrLf & "Thank you for your interest in our study! To make sure you fit our inclusion criteria, please call me at 206-316-0193 any time Tuesday between 9:00am-noon or Thursday between 2:00pm-4:00pm. The call should last 5-10 minutes. If I miss your call, please leave your name and number and I will call you back as soon as possible." & vbCrLf & vbCrLf & "Best," & vbCrLf & vbCrLf & "Whitney Teagle" & vbCrLf & "IRTA Post-Baccalaureate Fellow" & vbCrLf & "NIH-NEI (LSR)" & vbCrLf & "BLDG 49 | RM 2B71" & vbCrLf & "206-316-0193"
+  .Display
+' use .Send to send it automatically
+
+End With
+Set objMsg = Nothing
+
+Next
+
+End Sub
+
+' ################################################################
+' Move email to folder for initial emails of interest
+
+Sub MoveToFolder()
+
+    Dim objNS As Outlook.NameSpace
+    Dim objDestFolder As Outlook.MAPIFolder
+    Dim objItem As Outlook.MailItem
+    
+    Set objNS = Application.GetNamespace("MAPI")
+
+' Set the destination folder
+' move to subfolder of inbox
+Set objDestFolder = objNS.GetDefaultFolder(olFolderInbox).Folders("Human fMRI: Unscreened")
+      
+' use selected message
+ Set objItem = Application.ActiveExplorer.Selection.Item(1)
+ 
+ ' use opened message
+ 'Set objItem = Application.ActiveInspector.CurrentItem
+    
+' then do whatever
+        With objItem
+            .UnRead = False
+            '.MarkAsTask olMarkComplete
+            .Categories = "NOT responded yet (covid)" '"Interest Email"
+            .Save
+        End With
+
+' to move
+objItem.Move objDestFolder
+        
+    Set objDestFolder = Nothing
+    Set objNS = Nothing
+  
+
+ End Sub
