@@ -1,0 +1,444 @@
+Option Explicit
+
+Sub MainTres()
+
+    ImportTableToExcel
+
+End Sub
+
+' ##################################################################
+' Import table info to Excel sheet
+
+ Sub ImportTableToExcel()
+ Dim xlApp As Object
+ Dim xlWB As Object
+ Dim xlSheet As Object
+ Dim rCount As Long
+ Dim bXStarted As Boolean
+ Dim enviro As String
+ Dim strPath As String
+
+ Dim currentExplorer As Explorer
+ Dim Selection As Selection
+ Dim olItem As Outlook.MailItem
+ Dim obj As Object
+ Dim strColA, strColB, strColC As String
+ 
+               
+' Get Excel set up
+     On Error Resume Next
+     Set xlApp = GetObject(, "Excel.Application")
+     If Err <> 0 Then
+         Application.StatusBar = "Please wait while Excel source is opened ... "
+         Set xlApp = CreateObject("Excel.Application")
+         bXStarted = True
+     End If
+     On Error GoTo 0
+     
+'## Open a specific workbook to input the data
+'the path of the workbook under the windows user account
+enviro = CStr(Environ("teaglewl"))
+ strPath = enviro & "\\lsr-ds4\bc6\HUMAN_PROTOCOL\participant_lists\test2.xlsx"
+     Set xlWB = xlApp.Workbooks.Open(strPath)
+     Set xlSheet = xlWB.Sheets("Sheet1")
+'## End Specific workbook
+
+' Add column names
+  xlSheet.Range("A1") = "Sender"
+  xlSheet.Range("B1") = "SenderEmail"
+  xlSheet.Range("C1") = "RecievedDateTime"
+  xlSheet.Range("D1") = "FirstName"
+  xlSheet.Range("E1") = "MiddleName"
+  xlSheet.Range("F1") = "LastName"
+  xlSheet.Range("G1") = "MRN"
+  xlSheet.Range("H1") = "Sex"
+  xlSheet.Range("I1") = "Gender"
+  xlSheet.Range("J1") = "DOB"
+  xlSheet.Range("K1") = "SSN"
+  xlSheet.Range("L1") = "StreetAddress"
+  xlSheet.Range("M1") = "City"
+  xlSheet.Range("N1") = "State"
+  xlSheet.Range("O1") = "ZipCode"
+  xlSheet.Range("P1") = "PhoneNumber"
+  xlSheet.Range("Q1") = "TextOK"
+  xlSheet.Range("R1") = "CreatedATV"
+  xlSheet.Range("S1") = "DateScreening"
+  xlSheet.Range("T1") = "TimeScreening"
+  xlSheet.Range("U1") = "ParticipantStatus" ' AppointmentAvailable, Scheduled, Reminded, ToPay, No-Show, PaidYes
+  xlSheet.Range("V1") = "DateLatestConsent"
+  xlSheet.Range("W1") = "DateLastClinical"
+  xlSheet.Range("X1") = "Cleared7T"
+  xlSheet.Range("Y1") = "ClinicalValidity"
+
+' Process the message record
+    
+  On Error Resume Next
+'Find the next empty line of the worksheet
+rCount = xlSheet.Range("A" & xlSheet.Rows.Count).End(-4162).Row
+'needed for Exchange 2016. Remove if causing blank lines.
+rCount = rCount + 1
+
+' get the values from outlook
+Set currentExplorer = Application.ActiveExplorer
+Set Selection = currentExplorer.Selection
+For Each obj In Selection
+
+Set olItem = obj
+    
+ 'collect the fields
+    strColA = olItem.SenderName
+    strColB = olItem.SenderEmailAddress
+    strColC = olItem.ReceivedTime
+    
+ '#$#$#$#$#$collect table info based on https://www.extendoffice.com/documents/outlook/5225-export-outlook-email-body-table-to-excel.html
+ '#$#$#$#$#$For Each cell In Selection
+ 
+ '#$#$#$#$#$   Set xDoc = xMailItem.GetInspector.WordEditor
+ 
+ '### Get all recipient addresses
+ ' instead of To names
+Dim strRecipients As String
+Dim Recipient As Outlook.Recipient
+For Each Recipient In olItem.Recipients
+ strRecipients = Recipient.Address & "; " & strRecipients
+ Next Recipient
+
+'### end all recipients addresses
+
+'### Get the Exchange address
+' if not using Exchange, this block can be removed
+ Dim olEU As Outlook.ExchangeUser
+ Dim oEDL As Outlook.ExchangeDistributionList
+ Dim recip As Outlook.Recipient
+ Set recip = Application.Session.CreateRecipient(strColB)
+
+If InStr(1, strColB, "/") > 0 Then
+' if exchange, get smtp address
+    Select Case recip.AddressEntry.AddressEntryUserType
+       Case OlAddressEntryUserType.olExchangeUserAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+             strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olOutlookContactAddressEntry
+         Set olEU = recip.AddressEntry.GetExchangeUser
+         If Not (olEU Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+       Case OlAddressEntryUserType.olExchangeDistributionListAddressEntry
+         Set oEDL = recip.AddressEntry.GetExchangeDistributionList
+         If Not (oEDL Is Nothing) Then
+            strColB = olEU.PrimarySmtpAddress
+         End If
+     End Select
+End If
+' ### End Exchange section
+  
+ ' Extract table info based on https://stackoverflow.com/questions/22546918/vba-outlook-trying-to-extract-specific-data-from-email-body-and-export-to-excel
+ 
+ ' Search for specific text
+ Dim delimtedMessage As String
+ Dim messageArray() As String
+ delimtedMessage = olItem.Body
+   delimtedMessage = Replace(olItem.Body, "First name", "###")
+   delimtedMessage = Replace(delimtedMessage, "Middle name", "###")
+   delimtedMessage = Replace(delimtedMessage, "Last name", "###")
+   delimtedMessage = Replace(delimtedMessage, "Sex", "###")
+   delimtedMessage = Replace(delimtedMessage, "Gender", "###")
+   delimtedMessage = Replace(delimtedMessage, "Date of birth (MM/DD/YYYY)", "###")
+   delimtedMessage = Replace(delimtedMessage, "Do you have a social security number? (Yes/No)", "###")
+   delimtedMessage = Replace(delimtedMessage, "Street address", "###")
+   delimtedMessage = Replace(delimtedMessage, "City", "###")
+   delimtedMessage = Replace(delimtedMessage, "State", "###")
+   delimtedMessage = Replace(delimtedMessage, "Zip code", "###")
+   delimtedMessage = Replace(delimtedMessage, "Phone number", "###")
+   delimtedMessage = Replace(delimtedMessage, "Is it ok to contact you by text? (Yes/No)", "###")
+   delimtedMessage = Replace(delimtedMessage, "Preferred screening appointment date (MM/DD/YYYY)", "###")
+   delimtedMessage = Replace(delimtedMessage, "Preferred screening appointment time", "###")
+   delimtedMessage = Replace(delimtedMessage, "How did you find out about this study?", "###")
+   messageArray = Split(delimtedMessage, "###")
+
+' ##################################################################
+' Check for table
+
+If messageArray(14) = "" Then
+    MsgBox "The email you have selected does not contain a readable table."
+Else
+  
+  'write sender info in the excel sheet
+  xlSheet.Range("A" & rCount) = strColA ' sender name
+  xlSheet.Range("B" & rCount) = strColB ' sender address
+  xlSheet.Range("C" & rCount) = strColC ' recieved time
+  
+  ' Write table contents to excel
+    xlSheet.Range("D" & rCount) = messageArray(1)
+    xlSheet.Range("E" & rCount) = messageArray(2)
+    xlSheet.Range("F" & rCount) = messageArray(3)
+    xlSheet.Range("H" & rCount) = messageArray(4)
+    xlSheet.Range("I" & rCount) = messageArray(5)
+    xlSheet.Range("J" & rCount) = messageArray(6)
+    xlSheet.Range("K" & rCount) = messageArray(7)
+    xlSheet.Range("L" & rCount) = messageArray(8)
+    xlSheet.Range("M" & rCount) = messageArray(9)
+    xlSheet.Range("N" & rCount) = messageArray(10)
+    xlSheet.Range("O" & rCount) = messageArray(11)
+    xlSheet.Range("P" & rCount) = messageArray(12)
+    xlSheet.Range("Q" & rCount) = messageArray(13)
+    xlSheet.Range("S" & rCount) = messageArray(14)
+    xlSheet.Range("T" & rCount) = messageArray(15)
+ 
+ ' #########################################################
+ ' #########################################################
+ ' Check appointment schedule
+ 
+ ' Create (object?) of preferred appointment time
+ Dim PreferredDate As Object
+ Dim PreferredTime As Object
+ Dim TempValueDate As Object
+ Dim TempValueTime As Object
+ 
+ Set PreferredDate = xlSheet.Range("S" & rCount)
+ PreferredDate = Format(PreferredDate, "mm-dd-yyyy")
+ Set PreferredTime = xlSheet.Range("T" & rCount)
+ PreferredTime = Format(PreferredTime, "h:nn AM/PM")
+ 
+ ' Open spreadsheet with available appointments
+ Dim xlAppTemp As Object
+ Dim xlBookTemp As Object
+ Dim xlShtTemp As Object
+ Dim sPathTemp As String
+ Dim objTemp As Object
+ 
+'the path of the workbook under the windows user account
+sPathTemp = enviro & "\\lsr-ds4\bc6\HUMAN_PROTOCOL\participant_lists\test3.xlsx"
+'   // Excel
+    Set xlAppTemp = CreateObject("Excel.Application")
+'   // Workbook
+     Set xlBookTemp = xlAppTemp.Workbooks.Open(sPathTemp)
+'   // Sheet
+     Set xlShtTemp = xlBookTemp.Sheets("Sheet1")
+
+' For loop to check if value exists in column
+Dim i As Integer
+
+For i = 2 To 100
+    Set TempValueDate = xlShtTemp.Range("A" & i)
+    TempValueDate = Format(TempValueDate, "mm-dd-yyyy")
+    Set TempValueTime = xlShtTemp.Range("B" & i)
+    TempValueTime = Format(TempValueTime, "h:nn AM/PM")
+    Select Case PreferredDate
+    Case TempValueDate
+        Select Case PreferredTime
+        Case TempValueTime
+            ApptAvailable
+            xlSheet.Range("U" & rCount) = "AppointmentAvailable"
+            ' Also Send Confirmation Email code is here because otherwise I have to redo a bunch of stuff (to create rCount var again)
+            ' Confirmation Email:
+            Dim ApptDate As Object
+            Dim ApptTime As Object
+            Set ApptDate = xlSheet.Range("S" & rCount)
+            Set ApptTime = xlSheet.Range("T" & rCount)
+            ApptTime = Format(ApptTime, "h:nn AM/PM")
+            Dim objMsg As Object
+            Set objMsg = Application.CreateItem(olMailItem)
+            With objMsg
+                .To = obj.SenderEmailAddress
+                .Subject = "Screening Appointment Confirmation: Clinical Center Study PI18-EI-0046"
+                '.Categories = "Test"
+                .Body = "Greetings," & vbCrLf & vbCrLf _
+                & "This is an email confirmation for your screening appointment on " _
+                & ApptDate & " at " & ApptTime _
+                & ". We will send more specific instructions for your appointment in the next few days as well as a reminder email one week before your appointment." _
+                & vbCrLf & vbCrLf & "Thanks again for your interest in our study and feel free to email with any questions." _
+                & vbCrLf & vbCrLf & "Best," & vbCrLf & vbCrLf & "Whitney Teagle" & vbCrLf & "IRTA Post-Baccalaureate Fellow" & vbCrLf & "NIH-NEI (LSR)" & vbCrLf & "BLDG 49 | RM 2B71" & vbCrLf & "206-316-0193"
+                .Display
+                '.Send
+            End With
+            Set objMsg = Nothing
+            ' Delete Appt From Excel
+            ' 1. Get the appt date/time from the ATV info Excel sheet
+            ' 2. Delete the row with that date/time in it
+            xlShtTemp.Rows(i).Delete ' This seems like a risky shortcut, but I think it works? I'd feel more comfortable with a longer route (deleting based on the value in the other sheet...more checks n balances or whatevs) but this is easy for now
+        Case Else
+        End Select
+    Case Else
+    End Select
+Next i
+
+If xlSheet.Range("U" & rCount) <> "AppointmentAvailable" Then
+ApptNOTAvailable
+End If
+
+ ' End check appointment schedule
+ ' #########################################################
+ ' #########################################################
+ 
+'Next row
+  rCount = rCount + 1
+
+End If
+
+' size the cells
+    xlSheet.Columns("A:X").EntireColumn.AutoFit = False
+    xlSheet.Columns("A:X").EntireColumn.WrapText = False
+    'xlSheet.Columns("C:C").ColumnWidth = 100
+    'xlSheet.Columns("D:D").ColumnWidth = 30
+    'xlSheet.Range("A2").Select
+    xlSheet.Columns("A:X").VerticalAlignment = xlTop
+
+ Next
+ xlApp.Visible = True
+
+' to save but not close
+xlWB.Save
+
+' to save and close
+     xlWB.Close 1
+     If bXStarted Then
+         xlApp.Quit
+     End If
+' end save and close
+
+' to save and close
+    xlBookTemp.Save
+     xlBookTemp.Close 1
+     If bXStarted Then
+         xlAppTemp.Quit '''LEAVING OFF HERE IDK IF THIS WORKS IDK IF THIS IS IMPORTANT. I'M TRYING TO DELETE THE ROWS W/ AVAILABLE APPTS RN THOUGH
+     End If
+' end save and close
+    
+     Set olItem = Nothing
+     Set obj = Nothing
+     Set currentExplorer = Nothing
+     Set xlSheet = Nothing
+     Set xlWB = Nothing
+     Set xlApp = Nothing
+     Set PreferredDate = Nothing
+     Set PreferredTime = Nothing
+
+End Sub
+
+
+
+' ##################################################################
+' If selected appointment is available:
+
+Sub ApptAvailable()
+    ' Confirmation email is embedded in ImportTableToExcel sub.
+    ' DeleteApptFromExcel also in ImportTableToExcel sub.
+    MoveATVEmailToFolder
+
+End Sub
+
+
+Sub MoveATVEmailToFolder()
+
+Dim objNSAvail As Outlook.NameSpace
+Dim objDestFolderAvail As Outlook.MAPIFolder
+Dim objItemAvail As Outlook.MailItem
+    
+Set objNSAvail = Application.GetNamespace("MAPI")
+
+' Set the destination folder
+' move to subfolder of inbox
+Set objDestFolderAvail = objNSAvail.GetDefaultFolder(olFolderInbox).Folders("Human fMRI: Phone Screened")
+      
+' use selected message
+ Set objItemAvail = Application.ActiveExplorer.Selection.Item(1)
+ 
+ ' use opened message
+ 'Set objItem = Application.ActiveInspector.CurrentItem
+    
+' then do whatever
+    With objItemAvail
+        .UnRead = False
+        '.MarkAsTask olMarkComplete
+        .Categories = "Appt Scheduled"
+        .Save
+    End With
+
+' to move
+objItemAvail.Move objDestFolderAvail
+        
+Set objDestFolderAvail = Nothing
+Set objNSAvail = Nothing
+    
+End Sub
+
+' ##################################################################
+' If selected appointment is NOT available:
+
+Sub ApptNOTAvailable()
+MsgBox "apptNOTavail"
+    EmailChooseNewAppt
+    SendCurrentAvailableAppts
+    MoveATVEmailToFolderNOAPPT
+
+End Sub
+
+Sub EmailChooseNewAppt()
+
+Dim objMsg As MailItem
+Dim Selection As Selection
+Dim obj As Object
+
+Set Selection = ActiveExplorer.Selection
+
+For Each obj In Selection
+
+Dim objMsgChooseNew As Object
+Set objMsgChooseNew = Application.CreateItem(olMailItem)
+With objMsgChooseNew
+    .To = obj.SenderEmailAddress
+    .Subject = "RE: Screening Appointment Request: Clinical Center Study PI18-EI-0046"
+    '.Categories = "Test"
+    .Body = "Greetings," & vbCrLf & vbCrLf _
+        & "It looks like the date/time you selected has already been taken. In a separate email, please find an updated list with appointments available as of " _
+        & Time & ", " & Date & "." _
+        & vbCrLf & vbCrLf & "For an updated list of available appointments, please reply to this message with the subject '%Updated availability list request%'." _
+        & vbCrLf & vbCrLf & "Thanks again for your interest in our study and feel free to email with any questions." _
+        & vbCrLf & vbCrLf & "Best," & vbCrLf & vbCrLf & "Whitney Teagle" & vbCrLf & "IRTA Post-Baccalaureate Fellow" & vbCrLf & "NIH-NEI (LSR)" & vbCrLf & "BLDG 49 | RM 2B71" & vbCrLf & "206-316-0193"
+    .Display
+    .Send
+End With
+Next
+
+Set objMsgChooseNew = Nothing
+Set objMsg = Nothing
+Set obj = Nothing
+
+End Sub
+
+Sub MoveATVEmailToFolderNOAPPT()
+
+Dim objNSNOAvail As Outlook.NameSpace ' These variable names are getting rough. This one is objNS (I forget what NS meant) NO available (like, the appt wasn't available).
+Dim objDestFolderNOAvail As Outlook.MAPIFolder
+Dim objItemNOAvail As Outlook.MailItem
+    
+Set objNSNOAvail = Application.GetNamespace("MAPI")
+
+' Set the destination folder
+' move to subfolder of inbox
+Set objDestFolderNOAvail = objNSNOAvail.GetDefaultFolder(olFolderInbox).Folders("Human fMRI: Phone Screened")
+      
+' use selected message
+ Set objItemNOAvail = Application.ActiveExplorer.Selection.Item(1)
+ 
+ ' use opened message
+ 'Set objItem = Application.ActiveInspector.CurrentItem
+    
+' then do whatever
+    With objItemNOAvail
+        .UnRead = False
+        '.MarkAsTask olMarkComplete
+        .Categories = "Waiting for new appt selection"
+        .Save
+    End With
+
+' to move
+objItemNOAvail.Move objDestFolderNOAvail
+        
+Set objDestFolderNOAvail = Nothing
+Set objNSNOAvail = Nothing
+    
+End Sub
