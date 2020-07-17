@@ -1,0 +1,240 @@
+Option Explicit
+
+' ###############################################################
+' If did pass phone screening:
+
+Sub MainDos()
+
+    MoveAndCategorize
+    SendEmails
+    
+End Sub
+
+Sub SendEmails()
+
+    SolicitATVInfo
+    SendCurrentAvailableAppts
+    
+End Sub
+
+Sub MoveAndCategorize()
+
+Dim objNS As Outlook.NameSpace
+Dim objDestFolder As Outlook.MAPIFolder
+Dim objItem As Outlook.MailItem
+    
+Set objNS = Application.GetNamespace("MAPI")
+
+' Set the destination folder
+' move to subfolder of inbox
+Set objDestFolder = objNS.GetDefaultFolder(olFolderInbox).Folders("Human fMRI: Phone Screened")
+      
+' use selected message
+Set objItem = Application.ActiveExplorer.Selection.Item(1)
+ 
+' use opened message
+'Set objItem = Application.ActiveInspector.CurrentItem
+    
+' then do whatever
+    With objItem
+        .UnRead = False
+        '.MarkAsTask olMarkComplete
+        .Categories = "Phone Screened: Pass"
+        .Save
+    End With
+
+' to move
+objItem.Move objDestFolder
+        
+Set objDestFolder = Nothing
+Set objNS = Nothing
+  
+End Sub
+
+Sub SolicitATVInfo()
+
+Dim objMsg As MailItem
+Dim Selection As Selection
+Dim obj As Object
+
+Set Selection = ActiveExplorer.Selection
+
+
+
+' Open Human_fMRI_Table template.
+Dim temp As Object
+Set temp = Application.CreateItemFromTemplate("C:\Users\teaglewl\AppData\Roaming\Microsoft\Templates\Solicit_Info_Template.oft")
+
+For Each obj In Selection
+
+Set objMsg = Application.CreateItem(olMailItem)
+
+ With objMsg
+  If obj.SenderEmailAddress = "marianne.duyck@nih.gov" Then
+  .Subject = "Clinical Center Study PI18-EI-0046"
+  .HTMLBody = temp.HTMLBody
+  .Display
+  Else
+  .To = obj.SenderEmailAddress
+  .Subject = "Clinical Center Study PI18-EI-0046"
+  .HTMLBody = temp.HTMLBody
+  .Send
+  End If
+' use .Send to send it automatically
+
+End With
+Set objMsg = Nothing
+Set temp = Nothing
+
+Next
+
+End Sub
+
+
+Sub SendCurrentAvailableAppts()
+
+    Dim olItem As Outlook.MailItem
+    Dim xlApp As Object
+    Dim xlBook As Object
+    Dim xlSht As Object
+    Dim sPath As String
+    Dim enviro As String
+    Dim objMsg As MailItem
+    Dim Selection As Selection
+    Dim obj As Object
+    Set Selection = ActiveExplorer.Selection
+
+For Each obj In Selection
+
+Set objMsg = Application.CreateItem(olMailItem)
+
+Dim strTime
+'the current time
+strTime = Now
+strTime = Format(strTime, "h:nn AM/PM")
+
+'## Open a specific workbook to input the data
+'the path of the workbook under the windows user account
+enviro = CStr(Environ("teaglewl"))
+sPath = enviro & "\\lsr-ds4\bc6\HUMAN_PROTOCOL\participant_lists\test3.xlsx"
+'   // Excel
+    Set xlApp = CreateObject("Excel.Application")
+'   // Workbook
+     Set xlBook = xlApp.Workbooks.Open(sPath)
+'   // Sheet
+     Set xlSht = xlBook.Sheets("Sheet1")
+'## End Specific workbook
+
+    Debug.Print xlSht.Range("A1") '<- Print Value in immediate window
+
+'   // Create e-mail Item
+    Set olItem = Application.CreateItem(olMailItem)
+    
+    ' // Format available times
+    
+    Dim Time1 As Object
+    Set Time1 = xlSht.Range("B2")
+    Time1 = Format(Time1, "hh:mm AM/PM")
+'    Select Case Time1 ' Evaluate Time1.
+ '   Case 0.35 To 0.36
+  '  Time1 = "8:30 AM"
+   ' Case 0.375
+    'Time1 = "9:00 AM"
+'    Case Else
+ '   MsgBox "Uh-oh: check spreadsheet with available appointment times."
+  '  End Select
+   ' MsgBox Time1
+
+'Dim testvar As Object
+'Set testvar = Time1
+'MsgBox testvar
+
+    With olItem
+        If obj.SenderEmailAddress = "marianne.duyck@nih.gov" Then
+        .Subject = "Screening Appointment Availability: Clinical Center Study PI18-EI-0046"
+        .Body = "Greetings," & vbCrLf & vbCrLf _
+        & "The following screening appointment times are available as of " & strTime & ":" & vbCrLf & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A2") & " at " & Time1 & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A3") & " at " & xlSht.Range("B3").Value & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A4") & " at " & xlSht.Range("B4") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A5") & " at " & xlSht.Range("B5") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A6") & " at " & xlSht.Range("B6") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A7") & " at " & xlSht.Range("B7") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A8") & " at " & xlSht.Range("B8") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A9") & " at " & xlSht.Range("B9") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A10") & " at " & xlSht.Range("B10") _
+        & vbCrLf & vbCrLf & "Best," & vbCrLf & "Whitney" & vbCrLf & vbCrLf
+        .Display
+        Else
+        .To = obj.SenderEmailAddress
+        .Subject = "Screening Appointment Availability: Clinical Center Study PI18-EI-0046"
+        .Body = "Greetings," & vbCrLf & vbCrLf _
+        & "The following screening appointment times are available as of " & strTime & ":" & vbCrLf & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A2") & " at " & xlSht.Range("B2") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A3") & " at " & xlSht.Range("B3") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A4") & " at " & xlSht.Range("B4") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A5") & " at " & xlSht.Range("B5") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A6") & " at " & xlSht.Range("B6") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A7") & " at " & xlSht.Range("B7") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A8") & " at " & xlSht.Range("B8") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A9") & " at " & xlSht.Range("B9") & vbCrLf _
+        & "     -  Tuesday, " & xlSht.Range("A10") & " at " & xlSht.Range("B10") _
+        & vbCrLf & vbCrLf & "Best," & vbCrLf & "Whitney" & vbCrLf & vbCrLf
+        .Send
+        End If
+    End With
+
+'   // Close
+    xlBook.Close SaveChanges:=True
+'   // Quit
+    xlApp.Quit
+
+    '// CleanUp
+    Set xlApp = Nothing
+    Set xlBook = Nothing
+    Set xlSht = Nothing
+    Set olItem = Nothing
+    Set strTime = Nothing
+    Set objMsg = Nothing
+    
+Next
+
+End Sub
+
+' ################################################################
+' If didn't pass phone screening:
+
+
+Sub IneligibleAfterPhoneScreen()
+
+Dim objNS As Outlook.NameSpace
+Dim objDestFolder As Outlook.MAPIFolder
+Dim objItem As Outlook.MailItem
+    
+Set objNS = Application.GetNamespace("MAPI")
+
+' Set the destination folder
+' move to subfolder of inbox
+Set objDestFolder = objNS.GetDefaultFolder(olFolderInbox).Folders("Human fMRI: Phone Screened")
+      
+' use selected message
+Set objItem = Application.ActiveExplorer.Selection.Item(1)
+ 
+' use opened message
+'Set objItem = Application.ActiveInspector.CurrentItem
+    
+' then do whatever
+    With objItem
+        .UnRead = False
+        '.MarkAsTask olMarkComplete
+        .Categories = "Ineligible"
+        .Save
+    End With
+
+' to move
+objItem.Move objDestFolder
+        
+Set objDestFolder = Nothing
+Set objNS = Nothing
+
+End Sub
