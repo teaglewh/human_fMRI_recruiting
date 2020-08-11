@@ -5,26 +5,24 @@ Presentation: https://docs.google.com/presentation/d/13c9U_ZmzMkuhkrJpSYftrfgHS2
 
 # Contents (code)
 
-    1. After_initial_interest_email
-        -- Add new email info to Excel sheet; move the email to folder for initial emails
-        -- Respond to email with request for phone screening (currently lists days/times open for calling)
-        
-    2. After_phone_screening
-        ## If passed phone screening:
-             -- Move the email to the appropriate folder; categorize the email
-             -- Send emails: one email solicits participant information, the other sends current available appointments
-        ## If didn't pass phone screening:
-             -- Move and categorize email accordingly
-             
-    3. After_receive_ATV_info
-        -- Import filled-out table of participant information to Excel
-        ## If selected appointment is available:
-             -- Respond to the email
-             -- Move the email to appropriate folder
-        ## If selected appointment is not available
-             -- Send an email asking to choose another appointment time
-             -- Send an email with updated appointment availability
-             -- Move the email to appropriate folder
+**1. After_initial_interest_email**  
+    -- Add new email info to Excel sheet; move the email to folder for initial emails  
+    -- Respond to email with request for phone screening (currently lists days/times open for calling)  
+**2. After_phone_screening**  
+     *If passed phone screening:*  
+         -- Move the email to the appropriate folder; categorize the email  
+         -- Send emails: one email solicits participant information, the other sends current available appointments  
+    *If didn't pass phone screening:*  
+         -- Move and categorize email accordingly  
+**3. After_receive_ATV_info**  
+    -- Import filled-out table of participant information to Excel  
+    *If selected appointment is available:*  
+         -- Respond to the email  
+         -- Move the email to appropriate folder  
+    *If selected appointment is not available*  
+         -- Send an email asking to choose another appointment time  
+         -- Send an email with updated appointment availability  
+         -- Move the email to appropriate folder  
 
 # How to use this code: Overview
 
@@ -98,44 +96,44 @@ TODO: test the code and figure out this list.
 
 # Outstanding TODOs to complete The Full Vision
 
-- [X] **After initial email: button**
-        - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”
-        - [X] Add new email info to sheet
-        - [X] Move email to folder for initial emails of interest
-        - Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne 
-- [X] **After successful eligibility call: button on initial email**
-        - [X] Email draws from available screening sheet and lists the next 10
-        - [X] Sends formatted email asking for ATV info and preferred screening times
-        - [X] Moves initial email to folder for completed phone screening ppl
-- [X] [initial email]
-- [X] {call on Tuesday}
-- [X] [ATV info email]
-- [X] *Note: include button for paid in excel sheet for later button*
-- [ ] **After ATV table email received: button**
-        - [X] Adds ATV and appt info to new spreadsheet
-        - [ ] Moves ATV email to folder with like emails (regardless of appt success)
-        - [ ] Confirmation email (“you will get another email in the next few days with more details, but your appt is for this day”, CC me
-        - [ ] If selected date/time is already taken, email back with updated available times and CC me
-        - [ ] If selected date/time is not already taken, delete it from the excel spreadsheet and proceed:
-        - [ ] Checks free appts list to confirm that preferred date/time is there.
-        - Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot
-- [ ] *After I input MRN #: automatic*
-        - [ ] If “already ATV” not checked when MRN is entered, open but don’t send template email for attaching the long instructions
-        - [ ] If “already ATV” checked when MRN is entered, auto send simple instructions
-        - [ ] Email Stacy and Allison with name date time mrn #,, do this encrypted
-- [ ] {create or confirm ATV profile, retrieve MRN # and input it into excel as well as check whether there was already an ATV account}
-- [ ] {create appt in Roberts schedule}
-- [ ] {pay participant or don’t}
-- [ ] *Wednesday 1pm: automatic email*
-        - [ ] Encrypted says to pay participants with participant names. Email is to me only
-- [ ] **After pay participant: button 1**
-        - [ ] Deletes email
-        - [ ] Checks “paid” button in excel
-- [ ] **After don’t pay participant: button 2**
-        - [ ] Deletes email
-        - [ ] Make participant row highlighted red for no show in excel
-- [ ] {possibly get and attach long instructions in email to participant}
-- [ ] *Auto email*
-        - [ ] Auto 1 week and 1  day before appt (based on excel sheet), send reminder emails to participant
-- [X] *Auto: if send email w/ subject, send available appts*
+- [X] **After initial email: button**  
+        - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”  
+        - [X] Add new email info to sheet  
+        - [X] Move email to folder for initial emails of interest  
+        - Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne    
+- [X] **After successful eligibility call: button on initial email**  
+        - [X] Email draws from available screening sheet and lists the next 10  
+        - [X] Sends formatted email asking for ATV info and preferred screening times  
+        - [X] Moves initial email to folder for completed phone screening ppl  
+- [X] [initial email]  
+- [X] {call on Tuesday}  
+- [X] [ATV info email]  
+- [X] *Note: include button for paid in excel sheet for later button*    
+- [ ] **After ATV table email received: button**  
+        - [X] Adds ATV and appt info to new spreadsheet  
+        - [ ] Moves ATV email to folder with like emails (regardless of appt success)  
+        - [ ] Confirmation email (“you will get another email in the next few days with more details, but your appt is for this day”, CC me  
+        - [ ] If selected date/time is already taken, email back with updated available times and CC me  
+        - [ ] If selected date/time is not already taken, delete it from the excel spreadsheet and proceed:  
+        - [ ] Checks free appts list to confirm that preferred date/time is there.  
+        - Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot  
+- [ ] *After I input MRN #: automatic*  
+        - [ ] If “already ATV” not checked when MRN is entered, open but don’t send template email for attaching the long instructions  
+        - [ ] If “already ATV” checked when MRN is entered, auto send simple instructions  
+        - [ ] Email Stacy and Allison with name date time mrn #, do this encrypted  
+- [ ] {create or confirm ATV profile, retrieve MRN # and input it into excel as well as check whether there was already an ATV account}  
+- [ ] {create appt in Roberts schedule}  
+- [ ] {pay participant or don’t}  
+- [ ] *Wednesday 1pm: automatic email*  
+        - [ ] Encrypted says to pay participants with participant names. Email is to me only    
+- [ ] **After pay participant: button 1**  
+        - [ ] Deletes email  
+        - [ ] Checks “paid” button in excel    
+- [ ] **After don’t pay participant: button 2**  
+        - [ ] Deletes email  
+        - [ ] Make participant row highlighted red for no show in excel  
+- [ ] {possibly get and attach long instructions in email to participant}  
+- [ ] *Auto email*  
+        - [ ] Auto 1 week and 1  day before appt (based on excel sheet), send reminder emails to participant  
+- [X] *Auto: if send email w/ subject, send available appts*  
 
