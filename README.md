@@ -99,10 +99,10 @@ TODO: test the code and figure out this list.
 # Outstanding TODOs to complete The Full Vision
 
 - [X] **After initial email: button**
-        [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”
+        - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”
         - [X] Add new email info to sheet
         - [X] Move email to folder for initial emails of interest
-        Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne 
+        - Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne 
 - [X] **After successful eligibility call: button on initial email**
         - [X] Email draws from available screening sheet and lists the next 10
         - [X] Sends formatted email asking for ATV info and preferred screening times
@@ -118,7 +118,7 @@ TODO: test the code and figure out this list.
         - [ ] If selected date/time is already taken, email back with updated available times and CC me
         - [ ] If selected date/time is not already taken, delete it from the excel spreadsheet and proceed:
         - [ ] Checks free appts list to confirm that preferred date/time is there.
-        Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot
+        - Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot
 - [ ] *After I input MRN #: automatic*
         - [ ] If “already ATV” not checked when MRN is entered, open but don’t send template email for attaching the long instructions
         - [ ] If “already ATV” checked when MRN is entered, auto send simple instructions
