@@ -101,7 +101,7 @@ Formatting notes:
  - {Curly brackets} indicate something that you do, such as making appointments in Robert's schedule. Alas, these are tasks which cannot be automated (as far as I know).
  - *Italics* indicate a macro which causes an action to happen automatically. This will run in the background once prompted and will complete the step without your direct or conscious involvement. Hooray for technology!    
 
-
+Macros and workflow:
 - [X] **After initial email: button**
   - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”  
   - [X] Add new email info to sheet  
