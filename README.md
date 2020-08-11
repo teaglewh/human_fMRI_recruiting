@@ -18,31 +18,41 @@ Presentation: https://docs.google.com/presentation/d/13c9U_ZmzMkuhkrJpSYftrfgHS2
              
     3. After_receive_ATV_info
         -- Import filled-out table of participant information to Excel
-        -- If selected appointment is available, respond to the email and move it to appropriate folder
-        -- If selected appointment is not available, send an email asking to choose another appointment time as well as an email with updated appointment availability; move the email to appropriate folder
+        ## If selected appointment is available:
+             -- Respond to the email
+             -- Move the email to appropriate folder
+        ## If selected appointment is not available
+             -- Send an email asking to choose another appointment time
+             -- Send an email with updated appointment availability
+             -- Move the email to appropriate folder
 
 # How to use this code: Overview
 
-I'm not sure if the language I use to describe this is correct, but hopefully you'll get the idea. The code creates several macros. You (the user) can then create shortcut buttons which will automatically run the code when pressed.
+This code creates several macros. You (the user) can then create shortcut buttons in your email which will automatically run the code when pressed.
 
-In my Outlook application, I have customized the ribbon and added a custom group called "Human fMRI" on the main Home (Mail) tab. In this group, I have added four macro commands/buttons each with their own customized symbols: After Initial Email (with a phone book symbol), Pass Phone Screen (green check), Ineligible After Phone Screen (red X), and Import Participant ATV Info (save symbol). You can organize your email differently, use different symbols, etc, but this is how I have done it.
+In my Outlook application, I have customized the ribbon and added a custom group called "Human fMRI" on the main Home (Mail) tab. In this group, I have added four macro commands/buttons each with their own customized symbols: 
+     -- After Initial Email (with a phone book symbol)
+     -- Pass Phone Screen (green check)
+     -- Ineligible After Phone Screen (red X)
+     -- Import Participant ATV Info (save symbol)
+You can organize your email differently, use different symbols, etc, but this is how I have done it.
 
 # How to use this code: Instructions for use
 
 The potential study participant will email you expressing their interest in the study.
 
 1. Click on the email in your inbox to open it in the main window of your Outlook application.
-2. Click on the After Initial Email button.
+2. Click on the After Initial Email button. If Outlook asks you whether you want to enable macros, click yes.
 
 The email will disappear from your inbox (it has been labeled and moved to a folder called "Human fMRI: Unscreened" for easy organization; if your email does not already have this folder system, a new folder will be created). The participant will receive an automated email instructing them to call for a phone screening. Additionally, details about the email and sender will be saved into a simple Excel spreadsheet which keeps track of who has expressed interest in the study.
 
-3. The participant will call for the phone screening based on the instructions given in the email. You will conduct the screening over the phone based on the following script: (link)
+3. The participant will call for the phone screening based on the instructions given in the email. You will conduct the screening over the phone based on the following script: https://docs.google.com/document/d/1LSg-PGYq6A_IKoe_DdwDeL_igCmNNbUdN8sEVZCj3jc/edit?usp=sharing
 4. Following the phone conversation, go to the "Human fMRI: Unscreened" folder and select/open the interest email from the person you just phone screened.
 5. Depending on whether the person passed the phone screening or not, click on the appropriate button ("Pass Phone Screen" or "Ineligible After Phone Screen").
 
 The email will disappear from the "Human fMRI: Unscreened" folder and move to the "Human fMRI: Phone Screened" folder. It will be labeled depending on whether the person passed the phone screening or not. If they did not pass the phone screening, this is the end of what happens with them. However, if they DID pass the phone screening, two emails will automatically be sent to the person: one email will solicit the ATV patient information as well as their preferred appointment time, the other email will send current available appointments (this pulls dates and times from an Excel sheet, which has to be manually updated once in a blue moon). The participant is instructed to copy/paste a table into their return email, then fill out the table with their information before sending the email.
 
-The participant will hopefully understand and follow these instructions. As of writing this, I forget if there are any checks built in, but if there aren't then there should be some added. You will receive an email in your inbox that has a table of patient information in it.
+The participant will hopefully understand and follow these instructions. As of writing this, some checks have been built in, but as you use this, you may find that there are frequent use errors that should have checks built for or FAQs that should be addressed in the email. (Due to covid, I have not actually tested this code on participants) You will receive an email in your inbox that has a table of patient information in it.
 
 6. Open the email. Click on the Import Participant ATV Info button.
 
