@@ -39,7 +39,7 @@ You can organize your email differently, use different symbols, etc, but this is
 
 # How to use this code: Instructions for use
 
-The potential study participant will email you expressing their interest in the study.
+The potential study participant will email you expressing their interest in the study. Note that you will need to be connected to the VPN/the network to run this code.
 
 1. Click on the email in your inbox to open it in the main window of your Outlook application.
 2. Click on the After Initial Email button. If Outlook asks you whether you want to enable macros, click yes.
@@ -76,6 +76,8 @@ Create the macros
   1. Click on your new Developer tab. Click on the Visual Basic button in the Code group. (If you don't see this, you might need to further customize your ribbon to get that shortcut) It will open a VBA window.
   2. Right click on Project1 (left side of the screen, if yours looks anything like mine). Select Insert, then select Module.
   3. Copy/paste the code into the module. You can copy it into multipe modules, or all into the same module. Up to you--whatever you think will be most user-friendly for you.
+        3.1. Make sure all of the filepaths are correct. If not, change them in the code to reflect how you've mapped the network drive.
+        3.2. Make sure the text in the automated emails reflects what you want it to say (for example, are the days/times available for phone calls up-to-date? Is this how you will be organizing your phone screenings?) One way to check this is to run through various scenarios (send yourself an email and have it "pass" the phone screening, send another email that "fails" the phone screening, have another email that passes everything but selects an appointment time that is already taken, etc) to avoid looking for everything in the code itself.
   4. Close the VBA window. It saves automatically from what I can tell.
 
 Create your customized shortcut buttons
