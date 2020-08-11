@@ -56,7 +56,7 @@ The participant will hopefully understand and follow these instructions. As of w
 
 The table of information will be copied to an Excel sheet for participant ATV information. You will later reference this Excel document when making the participant's ATV account if they don't already have one. The participant's preferred appointment time will then be checked against the Excel file with the list of open appointments. If the appointment is available still, it will be removed from the list and a confirmation email will be sent to the participant. The email will then be moved to a new folder called [whatever it's called] and labeled. If the appointment is not available, a follow up email will be automatically sent to the participant asking them to choose a different day/time. An updated list of available appointments will also be sent. The email will be labeled accordingly.
 
-Now your only responsibilities are to set everything up in the system (create their ATV account if necessary, create an appointment, etc), send out reminder emails, pay the people, etc. (TODO: make these directions here more.............complete)
+Now your only responsibilities are to set everything up in the system (create their ATV account if necessary, create an appointment, etc), send out reminder emails, pay the people, etc. See last section and/or Marianne's instructions for more complete information about the other steps.
 
 # Creating the macros and setting up your email
 
