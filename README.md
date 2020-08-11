@@ -95,45 +95,51 @@ Create your customized shortcut buttons
 TODO: test the code and figure out this list.
 
 # Outstanding TODOs to complete The Full Vision
+Formatting notes:  
+ - **Bold text** indicates a button on the ribbon that you create, which you click on to complete the step.
+ - [Brackets] indicate something that the other person does, like send you an email: the ball is in their court. You don't have to do anything until their action prompts your next step.
+ - {Curly brackets} indicate something that you do, such as making appointments in Robert's schedule. Alas, these are tasks which cannot be automated (as far as I know).
+ - *Italics* indicate a macro which causes an action to happen automatically. This will run in the background once prompted and will complete the step without your direct or conscious involvement. Hooray for technology!    
+
 
 - [X] **After initial email: button**  
-        - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”  
-        - [X] Add new email info to sheet  
-        - [X] Move email to folder for initial emails of interest  
-        - Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne    
+  - [X] Respond with “thanks for interest pls call any time on Tuesday for eligibility screening”  
+  - [X] Add new email info to sheet  
+  - [X] Move email to folder for initial emails of interest  
+  - Note: Doesn’t send automatically for now in case the email is being forwarded from Marianne    
 - [X] **After successful eligibility call: button on initial email**  
-        - [X] Email draws from available screening sheet and lists the next 10  
-        - [X] Sends formatted email asking for ATV info and preferred screening times  
-        - [X] Moves initial email to folder for completed phone screening ppl  
+  - [X] Email draws from available screening sheet and lists the next 10  
+  - [X] Sends formatted email asking for ATV info and preferred screening times  
+  - [X] Moves initial email to folder for completed phone screening ppl  
 - [X] [initial email]  
 - [X] {call on Tuesday}  
 - [X] [ATV info email]  
 - [X] *Note: include button for paid in excel sheet for later button*    
 - [ ] **After ATV table email received: button**  
-        - [X] Adds ATV and appt info to new spreadsheet  
-        - [ ] Moves ATV email to folder with like emails (regardless of appt success)  
-        - [ ] Confirmation email (“you will get another email in the next few days with more details, but your appt is for this day”, CC me  
-        - [ ] If selected date/time is already taken, email back with updated available times and CC me  
-        - [ ] If selected date/time is not already taken, delete it from the excel spreadsheet and proceed:  
-        - [ ] Checks free appts list to confirm that preferred date/time is there.  
-        - Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot  
+  - [X] Adds ATV and appt info to new spreadsheet  
+  - [ ] Moves ATV email to folder with like emails (regardless of appt success)  
+  - [ ] Checks free appts list to confirm that preferred date/time is there.  
+  - [ ] If selected date/time is already taken, email back with updated available times and CC me  
+  - [ ] If selected date/time is not already taken, delete it from the excel spreadsheet and proceed:  
+  - [ ] Confirmation email (“you will get another email in the next few days with more details, but your appt is for this day”, CC me  
+  - Note: Later: make ATV table include top 3 choices and algorithm to the highest available slot  
 - [ ] *After I input MRN #: automatic*  
-        - [ ] If “already ATV” not checked when MRN is entered, open but don’t send template email for attaching the long instructions  
-        - [ ] If “already ATV” checked when MRN is entered, auto send simple instructions  
-        - [ ] Email Stacy and Allison with name date time mrn #, do this encrypted  
+  - [ ] If “already ATV” not checked when MRN is entered, open but don’t send template email for attaching the long instructions  
+  - [ ] If “already ATV” checked when MRN is entered, auto send simple instructions  
+  - [ ] Email Stacy and Allison with name date time mrn #, do this encrypted  
 - [ ] {create or confirm ATV profile, retrieve MRN # and input it into excel as well as check whether there was already an ATV account}  
 - [ ] {create appt in Roberts schedule}  
 - [ ] {pay participant or don’t}  
 - [ ] *Wednesday 1pm: automatic email*  
-        - [ ] Encrypted says to pay participants with participant names. Email is to me only    
+  - [ ] Encrypted says to pay participants with participant names. Email is to me only    
 - [ ] **After pay participant: button 1**  
-        - [ ] Deletes email  
-        - [ ] Checks “paid” button in excel    
+  - [ ] Deletes email  
+  - [ ] Checks “paid” button in excel    
 - [ ] **After don’t pay participant: button 2**  
-        - [ ] Deletes email  
-        - [ ] Make participant row highlighted red for no show in excel  
+  - [ ] Deletes email  
+  - [ ] Make participant row highlighted red for no show in excel  
 - [ ] {possibly get and attach long instructions in email to participant}  
 - [ ] *Auto email*  
-        - [ ] Auto 1 week and 1  day before appt (based on excel sheet), send reminder emails to participant  
+  - [ ] Auto 1 week and 1  day before appt (based on excel sheet), send reminder emails to participant  
 - [X] *Auto: if send email w/ subject, send available appts*  
 
