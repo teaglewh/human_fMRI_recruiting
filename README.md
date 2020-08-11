@@ -90,7 +90,7 @@ Create your customized shortcut buttons
   7. Select IneligibleAfterPhoneScreen. Click Rename. Name it "Ineligible After Phone Screen" and choose the red X symbol.
   8. Select MainTres. Click Rename. Name it "Import Participant ATV Info" and choose the save/floppy disk symbol to represent the fact that you are saving all the participant's ATV info.
   9. Click OK to close out of the Customize the Ribbon window. In your Home tab, you should see a new group with all your custom buttons in it.
-  10. Send yourself an email and test everything, both so you can see how it works and also to make sure these instructions are correct because I am going off of memory in the creation of these instructions. If this step is still written this way when you read it, it's because I never went back to double check these detailz.
+  10. Send yourself an email and test everything, both so you can see how it works and also to make sure these instructions are correct.
 
 # Outstanding TODOs in the code (to get it to do what is described in this file)
 
